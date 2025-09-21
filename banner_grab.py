@@ -1,7 +1,5 @@
-#! /usr/bin/env python3
+#! /usr/bin/python3
 import socket
-
-ports = [902, 912,80,8080]
 
 def grab_banner(ip, port):
     try:
@@ -24,15 +22,17 @@ def grab_banner(ip, port):
             banner = s.recv(1024)
         
         s.close()
-        return banner.decode(errors="ignore") if banner else "<no banner>"
+        return banner
     except Exception as e:
-        return f"<error: {e}>"
-
-def main():
-    ip = "<IP address>"  # your local IP
-    for port in ports:
-        banner = grab_banner(ip, port)
-        print(f"[{ip}:{port}] {banner}")
+        return e
 
 if __name__ == "__main__":
-    main()
+    ip = input("Enter the target IP you want to grab: ")
+    # for port in range(900, 1024):
+    for port in [902,912]:
+        banner = grab_banner(ip, port)
+        if banner:
+            print(f"Received banner from {ip}:{port} - {banner}")
+        else:
+            print(f"Could not retrieve banner from {ip}:{port}")
+    
